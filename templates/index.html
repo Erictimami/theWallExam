@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+            <!-- my own css file link in the last position to be priority-->
+    <!-- <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='CSS/server.css') }}">   
+    <script src="{{ url_for('static', filename='JS/server.js') }}"></script> -->
+    <style>
+      body{
+            margin: auto;
+            width: 1000px;
+            padding-left: 0px;
+            margin-top: 0px;
+            border: solid 1px;       
+      }
+      .container{
+          margin: 0px;
+          text-align: center;
+          width: 1000px;
+          padding-top: 0px;
+          padding-left: 0px;
+
+      }
+
+      .container_success{
+          margin: 0px;
+          text-align: center;
+          width: 1000px;
+          min-height: 600px;
+          padding-top: 30px;
+          padding-left: 0px;
+          border: solid 2px;
+          margin-left: 30px;
+      }
+
+      h3{
+          width: 300px;
+          margin-left: 20px;
+      }
+
+      p{
+          color: red;
+          font-size: 12px;
+      }
+      h5{
+          width: 300px;
+          margin-left: 0px;
+      }
+
+      form{
+          padding-top: 10px;
+          text-align: left;
+          width: 400px;
+          vertical-align: top;
+          display: inline-block;
+          margin-right: 30px;
+          margin-left: 30px;
+
+      }
+
+
+      #sub{
+          margin-left: 0px!important;
+          background-color: green;
+          margin-top: 7px!important;
+      }
+
+      a{
+          color: blue;
+          padding-left: 900px;
+      }
+      nav{
+        color: green!important;
+        width: 1000px;
+      }
+    </style>
+</head>
+<body>
+    <div class="container">
+      <nav class="navbar navbar-dark bg-dark mb-50">
+          <h4> CodingDojo Wall </h4>
+      </nav>
+        <h3>Login and Registration</h3>
+
+        {% with messages = get_flashed_messages(category_filter=["hackers"]) %}
+        {% if messages %}
+        {% for message in messages %}
+      <p>{{message}}</p>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+
+        {% with messages = get_flashed_messages(category_filter=["logged_out"]) %}
+        {% if messages %}
+        {% for message in messages %}
+      <p>{{message}}</p>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+        <form class="Register" action="/process_registration" method="POST">    
+            <h5>Register here!</h5>
+
+            <div class="form-group">
+                    <label for="first_name">First name:</label>
+                  {% with messages = get_flashed_messages(category_filter=["first_name"]) %}
+                  {% if messages %}
+              {% for message in messages %}
+                <p>{{message}}</p>
+              {% endfor %}
+            {% endif %}
+                {% endwith %}
+
+                    <input type="text" class="form-control" id="first_name" aria-describedby="emailHelp" value="{{session['first_name']}}" name="first_name">
+            </div>
+                <div class="form-group">
+                        <label for="last_name">Last name:</label>
+                      {% with messages = get_flashed_messages(category_filter=["last_name"]) %}
+                      {% if messages %}
+              {% for message in messages %}
+                <p>{{message}}</p>
+              {% endfor %}
+            {% endif %}
+                    {% endwith %}
+                        <input type="text" class="form-control" id="last_name" aria-describedby="emailHelp" value="{{session['last_name']}}" name="last_name">
+                    </div>
+                
+            <div class="form-group">
+                    <label for="email">Email:</label>
+                  {% with messages = get_flashed_messages(category_filter=["email"]) %}
+                  {% if messages %}
+                  {% for message in messages %}
+                    <p>{{message}}</p>
+                  {% endfor %}
+                {% endif %}
+                {% endwith %}
+                    <input type="text" class="form-control" id="email" aria-describedby="emailHelp" value="{{session['email']}}" name="email">
+            </div>
+            <div class="form-group">
+                    <label for="password">Password:</label>
+                  {% with messages = get_flashed_messages(category_filter=["password"]) %}
+                  {% if messages %}
+                  {% for message in messages %}
+                    <p>{{message}}</p>
+                  {% endfor %}
+                {% endif %}
+                {% endwith %}
+                    <input type="password" class="form-control" id="password" aria-describedby="emailHelp" name="password">
+            </div> 
+            <div class="form-group">
+                    <label for="confirm_pw">Confirm password:</label>
+                  {% with messages = get_flashed_messages(category_filter=["confirm_pw"]) %}
+                  {% if messages %}
+                  {% for message in messages %}
+                    <p>{{message}}</p>
+                  {% endfor %}
+                {% endif %}
+                {% endwith %}
+                    <input type="password" class="form-control" id="confirm_pw" aria-describedby="emailHelp" name="confirm_pw">
+            </div> 
+            <input class="btn btn-primary ml-5 mt-5" id="sub" type="submit" value="Register!" >
+        </form>
+
+        <form class="login" action="/process_login" method="POST">       
+            <h5>Login here!</h5>
+            <div class="form-group">
+                <label for="email">Email:</label>
+                {% with messages = get_flashed_messages(category_filter=["login"]) %}
+                  {% if messages %}
+                  {% for message in messages %}
+                    <p>{{message}}</p>
+                  {% endfor %}
+                {% endif %}
+                {% endwith %}
+                <input type="text" class="form-control" id="email" aria-describedby="emailHelp" name="email">
+            </div>
+            <div class="form-group">
+                <label for="Password">Password:</label>
+                {% with messages = get_flashed_messages(category_filter=["login"]) %}
+                  {% if messages %}
+                  {% for message in messages %}
+                    <p>{{message}}</p>
+                  {% endfor %}
+                {% endif %}
+                {% endwith %}
+                <input type="password" class="form-control" id="password" aria-describedby="emailHelp" name="password">
+            </div>  
+            <input class="btn btn-primary ml-5 mt-5" id="sub" type="submit" value="Login!" >
+        </form>     
+    </div>
+</body>
+</html>

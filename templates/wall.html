@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+            <!-- my own css file link in the last position to be priority-->
+    <!-- <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='CSS/server_wall.css') }}">   
+    <script src="{{ url_for('static', filename='JS/server.js') }}"></script> -->
+    <style>
+
+      body{
+          margin: auto;
+          width: 1000px;
+          padding-left: 40px;    
+      }
+      .container{
+          margin: 0px 0px 20px 20px!important;
+          width: 1000px;
+          padding-left: 0px;
+          background-color: whitesmoke;
+      }
+
+      .main_content{
+
+          width: 1000px;
+          min-height: 600px;
+          padding: 10px;
+      }
+
+      h4{
+          width: 300px;
+          margin-left: 20px;
+          display: inline-block;
+          vertical-align: bottom;
+      }
+      .messages_user h6{
+          width: 300px;
+          height: 20px;
+          margin-left: 20px;
+          vertical-align: top;
+          font-weight: bold;
+      }
+
+
+      .messages_user{
+          vertical-align: top;
+          width: 800px;
+          margin-left: 10px;
+          margin-top: 70px;
+      }
+      .messages{
+          vertical-align: top;
+          width: 800px;
+      }
+      .comments{
+          vertical-align: top;
+          width: 750px;
+          margin-left: 20px;
+          font-size: 11px
+      }
+
+      img{
+          display: inline-block;
+          text-align: right;
+          height: 12px;
+          width: 12px;
+      }
+      .form_message{
+          width: 750px!important;
+          height: 90px;
+          vertical-align: top;
+          font-size: 12px!important;
+          margin-bottom: 20px;
+          margin-left: 15px;
+          
+      }
+      .form_comment{
+          width: 700px!important;
+          height: 90px;
+          vertical-align: top;
+          font-size: 12px!important;
+          margin-bottom: 20px;
+          margin-left: 25px;
+          
+      }
+      form label{
+          width: 40px;
+          color: blue;
+          font-size: 16px;
+          margin-left: 0px;
+          width: 200px;
+      }
+      textarea{
+          font-size: 12px!important;
+          width: 750px;
+          margin-top: 0px!important;
+          font-size: 11px;
+      }
+      p{
+          color: black;
+          font-size: 12px;
+          width: 380px;
+          margin-bottom: 0px;
+      }
+      span{
+          color: blue;
+          font-size: 12px;
+          width: 350px;
+          margin-left: 20px;
+          margin-top: 0px;
+      }
+
+      #sub{
+          margin-left: 0px!important;
+          background-color: green;
+          margin-top: 7px!important;
+          vertical-align: top;
+          
+      }
+      a{
+          padding-left: 800px;
+          margin-top:0px;
+      }
+      nav{
+        color: green!important;
+        width: 1000px;
+      }
+
+
+
+    </style>
+</head>
+<body>
+  <div class="container">
+    <nav class="navbar navbar-dark bg-dark mb-50">
+        <h4> CodingDojo Wall </h4>
+        <h6> Welcome {{session['first_name']}} </h6>
+        <a href='/log_off' class="btn btn-outline-success my-2 my-sm-0 mf-800">Log Off</a>
+    </nav>
+    <div class="main_content">
+      <form class="form_message" action="/add_msg" method='POST' >       
+        <div class="form-group">
+            <label for="message">Post a message</label><br>
+            <textarea id="textarea" rows="3" name="message"></textarea>
+            <input class="btn btn-primary ml-5 mt-5" id="sub" type="submit" value="Post a message" >
+        </div>  
+      </form> 
+      {% for elt in result_msg%}
+      <div class="messages_user">
+          <h5>{{elt['first_name']}} {{elt['last_name']}} - {{elt['created_at']}}</h5>
+          <p class="messages">{{elt['message']}}</p>
+          {%if session['id']==elt['id_user_del']%}
+          <a href="/del_msg/{{elt['id']}}"><img type="submit" src="{{ url_for('static', filename='del_img.png') }}" alt="Delete here!"></a>
+          {%endif%}
+              {%for each_elt in result_cmt%}
+               {% if elt['id'] == each_elt['messages_id']%}
+               <h6> {{each_elt['first_name']}} {{each_elt['last_name']}} - {{each_elt['created_at']}}</h6>
+               <p class="comments">{{each_elt['comment']}}</p>
+               {%if session['id']==each_elt['id_user_del']%}
+               <a href="/del_cmt/{{each_elt['id']}}"><img type="submit" src="{{ url_for('static', filename='del_img.png') }}" alt="Delete here!"></a>
+               {%endif%}
+               {%endif%}
+              {%endfor%}
+          <form class="form_comment" action="/add_cmt/{{elt['id']}}" method='POST' >       
+            <div class="form-group">
+                <label for="message">Post a comment</label>
+                <textarea id="textarea" rows="3" name="comment"></textarea>
+                <input class="btn btn-primary ml-5 mt-5" id="sub" type="submit" value="Post a comment" >
+            </div>  
+          </form> 
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+
+
+</body>
+</html>
